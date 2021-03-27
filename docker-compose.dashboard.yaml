@@ -1,0 +1,16 @@
+version: '3'
+services: 
+  dashboard: 
+    container_name: dashboard
+    build: dashboard
+    restart: on-failure
+    ports:
+      - "3000:3000"
+    environment:
+      - WS_SECRET=eth-net-stats-has-a-secret
+    networks: 
+      - cliquenetwork
+
+networks: 
+  cliquenetwork:
+    external: true

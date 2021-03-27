@@ -1,0 +1,32 @@
+version: '3'
+services: 
+  bootstrap-node:
+    container_name: bootstrap-node
+    build: bootstrap
+    ports: 
+      - "8545:8545"
+      - "8546:8546"
+      - "30303:30303"
+      - "30303/udp"
+    networks: 
+      - cliquenetwork
+  bootstrap-watcher:
+    container_name: bootstrap-watcher
+    build: watcher
+    environment: 
+      - NODE_ENV=production
+      - RPC_HOST=bootstrap-node
+      - RPC_PORT=8545
+      - LISTENING_PORT=30303
+      - INSTANCE_NAME=bootstrap-node
+      - CONTACT_DETAILS=nocontact
+      - WS_SERVER=ws://dashboard:3000
+      - WS_SECRET=eth-net-stats-has-a-secret
+      - VERBOSITY=2
+    networks: 
+      - cliquenetwork
+volumes: 
+  data:
+networks: 
+  cliquenetwork:
+    external: true

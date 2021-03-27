@@ -1,0 +1,34 @@
+version: '3'
+services: 
+  member-node:
+    build: member
+    ports: 
+      - "8545"
+      - "30303"
+      - "30303/udp"
+    networks: 
+      - cliquenetwork
+      - membernetwork
+  member-watcher:
+    build: watcher
+    depends_on: 
+      - member-node
+    restart: on-failure
+    environment: 
+      - NODE_ENV=production
+      - RPC_HOST=member-node
+      - RPC_PORT=8545
+      - LISTENING_PORT=30303
+      - INSTANCE_NAME=member-node
+      - CONTACT_DETAILS=nocontact
+      - WS_SERVER=ws://dashboard:3000
+      - WS_SECRET=eth-net-stats-has-a-secret
+      - VERBOSITY=2
+    networks: 
+      - cliquenetwork
+      - membernetwork
+networks: 
+  membernetwork:
+  cliquenetwork:
+    external: true
+  
